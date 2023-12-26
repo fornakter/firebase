@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "393962201261",
+    "project_id": "savvy-mote-386105",
+    "storage_bucket": "savvy-mote-386105.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393962201261:android:44a49842ed5b124301a624",
+        "android_client_info": {
+          "package_name": "com.app.loginfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393962201261-1t4ugm18aes75umo8ku8sbg8uhouagma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJQg4gSy54hTm2prIYc_wkfCEBl23-haI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393962201261-1t4ugm18aes75umo8ku8sbg8uhouagma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
