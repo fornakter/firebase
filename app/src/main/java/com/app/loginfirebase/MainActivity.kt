@@ -1,6 +1,5 @@
 package com.app.loginfirebase
 
-import android.content.IntentSender
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -11,18 +10,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.loginfirebase.presentatiob.ProfileScreen
 import com.app.loginfirebase.presentatiob.sign_in.GoogleAuthUiClient
 import com.app.loginfirebase.presentatiob.sign_in.SignInScreen
 import com.app.loginfirebase.presentatiob.sign_in.SignInViewModel
@@ -32,7 +29,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private val googleAutchUiClient by lazy {
+    private val googleAuthUiClient by lazy {
         GoogleAuthUiClient(
         context = applicationContext,
         oneTapClient = Identity.getSignInClient(applicationContext)
@@ -60,7 +57,7 @@ class MainActivity : ComponentActivity() {
                                 onResult = {result ->
                                     if (result.resultCode == RESULT_OK){
                                         lifecycleScope.launch {
-                                            val signInResult = googleAutchUiClient.signInWithIntent(
+                                            val signInResult = googleAuthUiClient.signInWithIntent(
                                                 intent = result.data?: return@launch
                                             )
                                             viewModel.onSignInResult(signInResult)
@@ -79,12 +76,29 @@ class MainActivity : ComponentActivity() {
                                 state = state,
                                 onSignInClick = {
                                     lifecycleScope.launch {
-                                        val signinIntentSender = googleAutchUiClient.signIn()
+                                        val signinIntentSender = googleAuthUiClient.signIn()
                                         launcher.launch(
                                             IntentSenderRequest.Builder(
                                                 signinIntentSender ?: return@launch
                                             ).build()
                                         )
+                                    }
+                                }
+                            )
+                        }
+
+                        composable("profile"){
+                            ProfileScreen(
+                                userData = googleAuthUiClient.getSignedInUser(),
+                                onSignOut = {
+                                    lifecycleScope.launch {
+                                        googleAuthUiClient.signOut()
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Wylogowano",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        navController.popBackStack()
                                     }
                                 }
                             )
