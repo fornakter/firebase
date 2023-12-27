@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                             val state by viewModel.state.collectAsStateWithLifecycle()
 
                             val launcher = rememberLauncherForActivityResult(
-                                contract = ActivityResultContracts.StartActivityForResult(),
+                                contract = ActivityResultContracts.StartIntentSenderForResult(),
                                 onResult = {result ->
                                     if (result.resultCode == RESULT_OK){
                                         lifecycleScope.launch {
@@ -66,9 +66,16 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
 
-                            LaunchedEffect(key1 = state.isSignInSuccessfil){
-                                if (state.isSignInSuccessfil) {
-                                    Toast.makeText(applicationContext, "Zalogowano", Toast.LENGTH_LONG).show()
+                            LaunchedEffect(key1 = state.isSignInSuccessfil) {
+                                if(state.isSignInSuccessfil) {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Sign in successful",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+
+                                    navController.navigate("profile")
+                                    viewModel.resetState()
                                 }
                             }
 
@@ -76,10 +83,10 @@ class MainActivity : ComponentActivity() {
                                 state = state,
                                 onSignInClick = {
                                     lifecycleScope.launch {
-                                        val signinIntentSender = googleAuthUiClient.signIn()
+                                        val signInIntentSender = googleAuthUiClient.signIn()
                                         launcher.launch(
                                             IntentSenderRequest.Builder(
-                                                signinIntentSender ?: return@launch
+                                                signInIntentSender ?: return@launch
                                             ).build()
                                         )
                                     }
